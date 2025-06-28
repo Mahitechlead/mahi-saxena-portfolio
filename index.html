@@ -25,12 +25,138 @@
             --glass: rgba(255, 255, 255, 0.1);
         }
 
+        [data-theme="light"] {
+            --dark: #f8fafc;
+            --dark-light: #e2e8f0;
+            --text: #1e293b;
+            --text-muted: #64748b;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--dark);
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .navbar {
+            background: rgba(248, 250, 252, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .theme-toggle {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--gradient);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
         }
 
         .bg-animation {
@@ -66,6 +192,7 @@
             align-items: center;
             background: var(--gradient);
             overflow: hidden;
+            padding-top: 70px;
         }
 
         .header::before {
@@ -97,7 +224,7 @@
         }
 
         .hero-title {
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 8vw, 4rem);
             font-weight: 800;
             margin-bottom: 1rem;
             background: linear-gradient(45deg, #fff, #e2e8f0);
@@ -107,13 +234,13 @@
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
             margin-bottom: 2rem;
             opacity: 0.9;
         }
 
         .hero-description {
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 3vw, 1.1rem);
             max-width: 800px;
             margin: 0 auto 3rem;
             opacity: 0.8;
@@ -125,6 +252,7 @@
             justify-content: center;
             gap: 1.5rem;
             margin-bottom: 3rem;
+            flex-wrap: wrap;
         }
 
         .social-link {
@@ -147,12 +275,21 @@
             border-color: rgba(255, 255, 255, 0.4);
         }
 
+        .location {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            opacity: 0.8;
+        }
+
         .scroll-indicator {
             position: absolute;
             bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
             animation: bounce 2s infinite;
+            cursor: pointer;
         }
 
         @keyframes bounce {
@@ -169,7 +306,7 @@
 
         .section-title {
             text-align: center;
-            font-size: 3rem;
+            font-size: clamp(2rem, 6vw, 3rem);
             font-weight: 700;
             margin-bottom: 4rem;
             position: relative;
@@ -240,7 +377,7 @@
         /* Skills */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
@@ -268,13 +405,31 @@
         /* Projects */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
 
         .project-card {
             position: relative;
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: var(--gradient);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .project-image {
+            transform: scale(1.05);
         }
 
         .project-title {
@@ -342,26 +497,100 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Responsive */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: rgba(15, 23, 42, 0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding-top: 2rem;
+                transition: left 0.3s ease;
             }
-            
-            .hero-subtitle {
-                font-size: 1.2rem;
+
+            [data-theme="light"] .nav-menu {
+                background: rgba(248, 250, 252, 0.95);
             }
-            
-            .section-title {
-                font-size: 2rem;
+
+            .nav-menu.active {
+                left: 0;
             }
-            
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .social-links {
+                gap: 1rem;
+            }
+
+            .social-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
             .projects-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .container {
-                padding: 0 1rem;
+
+            .cert-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 4rem 0;
+            }
+
+            .back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .hero-description {
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .social-links {
+                flex-direction: column;
+                align-items: center;
             }
         }
 
@@ -379,10 +608,32 @@
     </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">MS</div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#education" class="nav-link">Education</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#certifications" class="nav-link">Certifications</a></li>
+            </ul>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-toggle" id="navToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
     <div class="bg-animation"></div>
 
     <!-- Header -->
-    <header class="header">
+    <header class="header" id="home">
         <div class="container">
             <div class="hero-content">
                 <h1 class="hero-title">Mahi Saxena</h1>
@@ -414,13 +665,13 @@
                 </div>
             </div>
         </div>
-        <div class="scroll-indicator">
+        <div class="scroll-indicator" onclick="scrollToSection('education')">
             <i class="fas fa-chevron-down"></i>
         </div>
     </header>
 
     <!-- Education -->
-    <section class="section">
+    <section class="section" id="education">
         <div class="container">
             <h2 class="section-title fade-in">Education</h2>
             <div class="card education-card fade-in">
@@ -436,7 +687,7 @@
     </section>
 
     <!-- Skills -->
-    <section class="section">
+    <section class="section" id="skills">
         <div class="container">
             <h2 class="section-title fade-in">Technical Skills</h2>
             <div class="skills-grid fade-in">
@@ -490,13 +741,15 @@
     </section>
 
     <!-- Projects -->
-    <section class="section">
+    <section class="section" id="projects">
         <div class="container">
             <h2 class="section-title fade-in">Projects</h2>
             <div class="projects-grid">
                 <div class="card project-card fade-in">
-                    <h3 class="project-title">
+                    <div class="project-image">
                         <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="project-title">
                         Blockchain-based Cyber Threat Reporting System
                     </h3>
                     <p>Built a decentralized web application to detect, store, and verify cyber threats using a custom blockchain and Ethereum smart contracts. Features Flask REST APIs for threat data collection, pattern detection using regular expressions, and cryptographic security through blockchain verification.</p>
@@ -510,8 +763,10 @@
                     </div>
                 </div>
                 <div class="card project-card fade-in">
-                    <h3 class="project-title">
+                    <div class="project-image">
                         <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3 class="project-title">
                         Student Profile Portal
                     </h3>
                     <p>Developed a comprehensive web-based portal where students can create, update, and view academic and personal profiles. Implemented with Flask backend, SQLite database, user authentication, form validation, and responsive frontend design.</p>
@@ -528,7 +783,7 @@
     </section>
 
     <!-- Certifications -->
-    <section class="section">
+    <section class="section" id="certifications">
         <div class="container">
             <h2 class="section-title fade-in">Certifications</h2>
             <div class="cert-grid">
@@ -594,15 +849,62 @@
         </div>
     </footer>
 
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
     <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'light') {
+                body.removeAttribute('data-theme');
+                icon.className = 'fas fa-moon';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-sun';
+            }
+        });
+
+        // Mobile navigation
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
             });
+        });
+
+        // Smooth scrolling
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Back to top button
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         // Intersection Observer for fade-in animations
@@ -629,9 +931,9 @@
             const particle = document.createElement('div');
             particle.style.cssText = `
                 position: fixed;
-                width: 4px;
-                height: 4px;
-                background: radial-gradient(circle, rgba(99, 102, 241, 0.8), transparent);
+                width: ${Math.random() * 6 + 2}px;
+                height: ${Math.random() * 6 + 2}px;
+                background: radial-gradient(circle, rgba(99, 102, 241, ${Math.random() * 0.5 + 0.3}), transparent);
                 border-radius: 50%;
                 pointer-events: none;
                 z-index: 1;
@@ -660,7 +962,7 @@
         document.head.appendChild(style);
 
         // Create particles periodically
-        setInterval(createParticle, 500);
+        setInterval(createParticle, 800);
 
         // Add typing effect to hero title
         const heroTitle = document.querySelector('.hero-title');
@@ -677,6 +979,22 @@
         };
         
         setTimeout(typeWriter, 1000);
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(15, 23, 42, 0.95)';
+                if (body.getAttribute('data-theme') === 'light') {
+                    navbar.style.background = 'rgba(248, 250, 252, 0.95)';
+                }
+            } else {
+                navbar.style.background = 'rgba(15, 23, 42, 0.9)';
+                if (body.getAttribute('data-theme') === 'light') {
+                    navbar.style.background = 'rgba(248, 250, 252, 0.9)';
+                }
+            }
+        });
     </script>
 </body>
 </html>
