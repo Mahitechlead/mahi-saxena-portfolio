@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
+import type { JSX } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { projects, type Project } from '../data/resume'
 import { SectionHeading } from './SectionHeading'
@@ -9,7 +10,7 @@ import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 type BannerConfig = {
   gradient: string
   accent: string
-  Icon: () => React.JSX.Element
+  Icon: () => JSX.Element
 }
 
 const CATEGORY_BANNERS: Record<Project['category'], BannerConfig> = {
@@ -24,7 +25,7 @@ const CATEGORY_BANNERS: Record<Project['category'], BannerConfig> = {
         stroke="currentColor"
         strokeWidth={1.5}
         className="h-12 w-12 drop-shadow-lg"
-        aria-hidden
+        aria-hidden={true}
       >
         <path
           strokeLinecap="round"
@@ -50,7 +51,7 @@ const CATEGORY_BANNERS: Record<Project['category'], BannerConfig> = {
         stroke="currentColor"
         strokeWidth={1.5}
         className="h-12 w-12 drop-shadow-lg"
-        aria-hidden
+        aria-hidden={true}
       >
         <path
           strokeLinecap="round"
@@ -71,7 +72,7 @@ const CATEGORY_BANNERS: Record<Project['category'], BannerConfig> = {
         stroke="currentColor"
         strokeWidth={1.5}
         className="h-12 w-12 drop-shadow-lg"
-        aria-hidden
+        aria-hidden={true}
       >
         <path
           strokeLinecap="round"
@@ -92,7 +93,7 @@ const CATEGORY_BANNERS: Record<Project['category'], BannerConfig> = {
         stroke="currentColor"
         strokeWidth={1.5}
         className="h-12 w-12 drop-shadow-lg"
-        aria-hidden
+        aria-hidden={true}
       >
         <path
           strokeLinecap="round"
@@ -110,7 +111,7 @@ function ProjectBanner({ category }: { category: Project['category'] }) {
   return (
     <div
       className={`relative h-28 w-full overflow-hidden bg-gradient-to-br ${gradient}`}
-      aria-hidden
+      aria-hidden={true}
     >
       {/* subtle dot-grid texture */}
       <svg
@@ -347,7 +348,7 @@ export function Projects() {
                     background:
                       'radial-gradient(600px circle at var(--mx,50%) var(--my,0%), rgba(34,211,238,0.12), transparent 42%)',
                   }}
-                  aria-hidden
+                  aria-hidden={true}
                 />
                 <ProjectBanner category={p.category} />
                 <div className="relative flex flex-1 flex-col p-7">
