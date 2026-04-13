@@ -4,13 +4,30 @@ import { awards, certifications, extracurricular } from '../data/resume'
 import { SectionHeading } from './SectionHeading'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 
-/** Clearbit logo CDN — returns a clean square logo for most major companies */
-const CLEARBIT = 'https://logo.clearbit.com'
+/**
+ * Simple Icons CDN — open-source, highly reliable icon set for popular brands.
+ * Format: https://cdn.simpleicons.org/{slug}/{hex-color}
+ */
+const SIMPLE_ICONS = 'https://cdn.simpleicons.org'
 
-const ISSUER_LOGOS: Record<string, { src: string; bg: string }> = {
-  Oracle: { src: `${CLEARBIT}/oracle.com`, bg: 'bg-red-950/60' },
-  Cisco: { src: `${CLEARBIT}/cisco.com`, bg: 'bg-blue-950/60' },
-  Infosys: { src: `${CLEARBIT}/infosys.com`, bg: 'bg-indigo-950/60' },
+type IssuerConfig = { src: string; bg: string; initial: string }
+
+const ISSUER_LOGOS: Record<string, IssuerConfig> = {
+  Oracle: {
+    src: `${SIMPLE_ICONS}/oracle/F80000`,
+    bg: 'bg-red-950/80',
+    initial: 'O',
+  },
+  Cisco: {
+    src: `${SIMPLE_ICONS}/cisco/1BA0D7`,
+    bg: 'bg-sky-950/80',
+    initial: 'C',
+  },
+  Infosys: {
+    src: `${SIMPLE_ICONS}/infosys/007CC5`,
+    bg: 'bg-blue-950/80',
+    initial: 'I',
+  },
 }
 
 function IssuerLogo({ issuer }: { issuer: string }) {
@@ -19,16 +36,20 @@ function IssuerLogo({ issuer }: { issuer: string }) {
   if (!config) return null
   return (
     <span
-      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${config.bg} ring-1 ring-white/10`}
+      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${config.bg} ring-1 ring-white/10`}
       title={issuer}
     >
-      {!errored && (
+      {errored ? (
+        <span className="select-none text-base font-bold text-white/70">
+          {config.initial}
+        </span>
+      ) : (
         <img
           src={config.src}
           alt={issuer}
-          width={28}
-          height={28}
-          className="h-7 w-7 rounded object-contain"
+          width={32}
+          height={32}
+          className="h-8 w-8 object-contain"
           onError={() => setErrored(true)}
         />
       )}

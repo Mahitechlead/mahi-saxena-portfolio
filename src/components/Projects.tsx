@@ -1,8 +1,150 @@
-import { useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { projects, type Project } from '../data/resume'
 import { SectionHeading } from './SectionHeading'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
+
+/* ─── Category banner config ─────────────────────────────────────────────── */
+
+type BannerConfig = {
+  gradient: string
+  accent: string
+  Icon: () => React.JSX.Element
+}
+
+const CATEGORY_BANNERS: Record<Project['category'], BannerConfig> = {
+  ml: {
+    gradient: 'from-emerald-950 via-teal-900/80 to-emerald-900/50',
+    accent: '#34d399',
+    // Eye / object-detection icon — represents computer vision
+    Icon: () => (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="h-12 w-12 drop-shadow-lg"
+        aria-hidden
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+        />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+        />
+      </svg>
+    ),
+  },
+  data: {
+    gradient: 'from-sky-950 via-cyan-900/80 to-sky-900/50',
+    accent: '#38bdf8',
+    // Bar-chart icon — represents data analytics
+    Icon: () => (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="h-12 w-12 drop-shadow-lg"
+        aria-hidden
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"
+        />
+      </svg>
+    ),
+  },
+  ai: {
+    gradient: 'from-violet-950 via-purple-900/80 to-violet-900/50',
+    accent: '#a78bfa',
+    // Microphone icon — represents voice AI / interviews
+    Icon: () => (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="h-12 w-12 drop-shadow-lg"
+        aria-hidden
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"
+        />
+      </svg>
+    ),
+  },
+  fullstack: {
+    gradient: 'from-orange-950 via-amber-900/80 to-orange-900/50',
+    accent: '#fb923c',
+    // Code-brackets icon — represents full-stack development
+    Icon: () => (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.5}
+        className="h-12 w-12 drop-shadow-lg"
+        aria-hidden
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"
+        />
+      </svg>
+    ),
+  },
+}
+
+/** Gradient banner with subtle dot-grid and a category SVG icon */
+function ProjectBanner({ category }: { category: Project['category'] }) {
+  const { gradient, accent, Icon } = CATEGORY_BANNERS[category]
+  return (
+    <div
+      className={`relative h-28 w-full overflow-hidden bg-gradient-to-br ${gradient}`}
+      aria-hidden
+    >
+      {/* subtle dot-grid texture */}
+      <svg
+        className="absolute inset-0 h-full w-full opacity-[0.08]"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <pattern
+            id={`dot-${category}`}
+            x="0"
+            y="0"
+            width="18"
+            height="18"
+            patternUnits="userSpaceOnUse"
+          >
+            <circle cx="2" cy="2" r="1.2" fill="white" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill={`url(#dot-${category})`} />
+      </svg>
+      {/* bottom gradient fade into card body */}
+      <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/30 to-transparent" />
+      {/* centred icon */}
+      <div
+        className="absolute inset-0 flex items-center justify-center"
+        style={{ color: accent }}
+      >
+        <Icon />
+      </div>
+    </div>
+  )
+}
+
+/* ─── Tech-logo strip ─────────────────────────────────────────────────────── */
 
 const DEVICON_BASE =
   'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons'
@@ -10,10 +152,9 @@ const DEVICON_BASE =
 /** Map of technology name → Devicon SVG URL */
 const TECH_LOGOS: Record<string, string> = {
   Python: `${DEVICON_BASE}/python/python-original.svg`,
-  'React': `${DEVICON_BASE}/react/react-original.svg`,
+  React: `${DEVICON_BASE}/react/react-original.svg`,
   'React.js': `${DEVICON_BASE}/react/react-original.svg`,
   'Node.js': `${DEVICON_BASE}/nodejs/nodejs-original.svg`,
-  Express: `${DEVICON_BASE}/express/express-original.svg`,
   MongoDB: `${DEVICON_BASE}/mongodb/mongodb-original.svg`,
   PostgreSQL: `${DEVICON_BASE}/postgresql/postgresql-original.svg`,
   Pandas: `${DEVICON_BASE}/pandas/pandas-original.svg`,
@@ -208,6 +349,7 @@ export function Projects() {
                   }}
                   aria-hidden
                 />
+                <ProjectBanner category={p.category} />
                 <div className="relative flex flex-1 flex-col p-7">
                   <TechLogoStrip stack={p.stack} />
                   <div className="flex flex-wrap items-center gap-2">
