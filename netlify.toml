@@ -1,0 +1,20 @@
+# Deploy this Vite + React app to Netlify (e.g. https://mahi-saxena.netlify.app/)
+# Dashboard: Site settings → Build & deploy → should match these values.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Single-page app: send unknown paths to index.html (safe if you add client-side routes later)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
