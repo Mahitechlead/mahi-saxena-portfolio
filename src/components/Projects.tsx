@@ -4,6 +4,51 @@ import { projects, type Project } from '../data/resume'
 import { SectionHeading } from './SectionHeading'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 
+const DEVICON_BASE =
+  'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons'
+
+/** Map of technology name → Devicon SVG URL */
+const TECH_LOGOS: Record<string, string> = {
+  Python: `${DEVICON_BASE}/python/python-original.svg`,
+  'React': `${DEVICON_BASE}/react/react-original.svg`,
+  'React.js': `${DEVICON_BASE}/react/react-original.svg`,
+  'Node.js': `${DEVICON_BASE}/nodejs/nodejs-original.svg`,
+  Express: `${DEVICON_BASE}/express/express-original.svg`,
+  MongoDB: `${DEVICON_BASE}/mongodb/mongodb-original.svg`,
+  PostgreSQL: `${DEVICON_BASE}/postgresql/postgresql-original.svg`,
+  Pandas: `${DEVICON_BASE}/pandas/pandas-original.svg`,
+  NumPy: `${DEVICON_BASE}/numpy/numpy-original.svg`,
+  Streamlit: `${DEVICON_BASE}/streamlit/streamlit-original.svg`,
+  Docker: `${DEVICON_BASE}/docker/docker-original.svg`,
+  Git: `${DEVICON_BASE}/git/git-original.svg`,
+  Java: `${DEVICON_BASE}/java/java-original.svg`,
+}
+
+function TechLogoStrip({ stack }: { stack: string[] }) {
+  const logos = stack
+    .map((tech) => ({ tech, url: TECH_LOGOS[tech] }))
+    .filter((item): item is { tech: string; url: string } => Boolean(item.url))
+    .slice(0, 5)
+
+  if (logos.length === 0) return null
+
+  return (
+    <div className="mb-4 flex items-center gap-2.5">
+      {logos.map(({ tech, url }) => (
+        <img
+          key={tech}
+          src={url}
+          alt={tech}
+          title={tech}
+          width={26}
+          height={26}
+          className="h-[26px] w-[26px] rounded object-contain opacity-85 transition-opacity group-hover:opacity-100"
+        />
+      ))}
+    </div>
+  )
+}
+
 const categoryLabels: Record<Project['category'], string> = {
   ml: 'ML & Vision',
   data: 'Data & Analytics',
@@ -164,6 +209,7 @@ export function Projects() {
                   aria-hidden
                 />
                 <div className="relative flex flex-1 flex-col p-7">
+                  <TechLogoStrip stack={p.stack} />
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="rounded-full bg-white/5 px-2.5 py-0.5 font-mono text-[10px] tracking-wider text-cyan-300 uppercase">
                       {categoryLabels[p.category]}
