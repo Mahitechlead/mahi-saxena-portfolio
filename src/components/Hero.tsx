@@ -117,9 +117,9 @@ export function Hero() {
                   background:
                     'conic-gradient(from 180deg, #22d3ee, #7c3aed, #22d3ee)',
                   padding: '3px',
-                  borderRadius: '9999px',
                 }}
               >
+                {/* inner circle that masks the gradient, creating a visible border ring */}
                 <div className="h-full w-full rounded-full bg-void" />
               </div>
               {/* inner pulse ring */}
