@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { awards, certifications, extracurricular } from '../data/resume'
 import { SectionHeading } from './SectionHeading'
@@ -14,23 +15,23 @@ const ISSUER_LOGOS: Record<string, { src: string; bg: string }> = {
 
 function IssuerLogo({ issuer }: { issuer: string }) {
   const config = ISSUER_LOGOS[issuer]
+  const [errored, setErrored] = useState(false)
   if (!config) return null
   return (
     <span
       className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${config.bg} ring-1 ring-white/10`}
       title={issuer}
     >
-      <img
-        src={config.src}
-        alt={issuer}
-        width={28}
-        height={28}
-        className="h-7 w-7 rounded object-contain"
-        onError={(e) => {
-          // hide broken image; the ring container still provides visual spacing
-          ;(e.currentTarget as HTMLImageElement).style.display = 'none'
-        }}
-      />
+      {!errored && (
+        <img
+          src={config.src}
+          alt={issuer}
+          width={28}
+          height={28}
+          className="h-7 w-7 rounded object-contain"
+          onError={() => setErrored(true)}
+        />
+      )}
     </span>
   )
 }
