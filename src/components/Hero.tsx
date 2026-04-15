@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { profile } from '../data/resume'
 import { useTypewriter } from '../hooks/useTypewriter'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
-import profilePhoto from '../assets/hero.png'
+import profilePhoto from '../assets/hero.jpg'
 
 export function Hero() {
   const reduced = usePrefersReducedMotion()
@@ -128,7 +128,7 @@ export function Hero() {
               <img
                 src={profilePhoto}
                 alt={`${profile.name} — profile photo`}
-                className="absolute inset-[4px] h-[calc(100%-8px)] w-[calc(100%-8px)] rounded-full object-cover object-center shadow-xl"
+                className="absolute inset-[4px] h-[calc(100%-8px)] w-[calc(100%-8px)] rounded-full object-cover object-top shadow-xl"
                 draggable={false}
               />
             </div>
